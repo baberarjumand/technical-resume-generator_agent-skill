@@ -1,0 +1,21 @@
+{
+  "name": "tech-resume-generator",
+  "version": "1.0.0",
+  "description": "Generate optimized one-page ATS-safe tech resumes (JSON + PDF) from career materials — general or JD-tailored.",
+  "author": {
+    "name": "Baber Arjumand",
+    "url": "https://baberarjumand.com"
+  },
+  "homepage": "https://github.com/baberarjumand/technical-resume-generator_agent-skill",
+  "repository": "https://github.com/baberarjumand/technical-resume-generator_agent-skill",
+  "license": "MIT",
+  "keywords": [
+    "resume",
+    "cv",
+    "ats",
+    "tech-resume",
+    "career",
+    "pdf",
+    "agent-skills"
+  ]
+}

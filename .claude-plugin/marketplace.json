@@ -1,0 +1,39 @@
+{
+  "name": "tech-resume-generator",
+  "version": "1.0.0",
+  "description": "Agent Skills marketplace for generating optimized one-page tech resumes from career materials.",
+  "owner": {
+    "name": "Baber Arjumand",
+    "url": "https://baberarjumand.com"
+  },
+  "plugins": [
+    {
+      "name": "tech-resume-generator",
+      "source": "./plugins/tech-resume-generator",
+      "description": "Generate optimized one-page ATS-safe tech resumes (JSON + PDF) from career materials — general or JD-tailored.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Baber Arjumand",
+        "url": "https://baberarjumand.com"
+      },
+      "homepage": "https://github.com/baberarjumand/technical-resume-generator_agent-skill",
+      "repository": "https://github.com/baberarjumand/technical-resume-generator_agent-skill",
+      "license": "MIT",
+      "keywords": [
+        "resume",
+        "cv",
+        "ats",
+        "tech-resume",
+        "career",
+        "pdf",
+        "agent-skills"
+      ],
+      "category": "productivity",
+      "tags": [
+        "resume",
+        "ats",
+        "career"
+      ]
+    }
+  ]
+}

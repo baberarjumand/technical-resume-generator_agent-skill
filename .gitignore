@@ -1,0 +1,31 @@
+node_modules/
+/package-lock.json
+!skills/tech-resume-generator/package-lock.json
+.DS_Store
+*.log
+.venv/
+__pycache__/
+*.pyc
+
+# User-provided career data and generated outputs (keep folder READMEs)
+user_data/**
+!user_data/README.md
+!user_data/.gitkeep
+output/**
+!output/.gitkeep
+
+# Extraction intermediates
+user_data/_extracted/
+**/_extracted/
+
+# Agent-written one-off extractors may create temp files
+skills/tech-resume-generator/scripts/extractors/__pycache__/
+tech-resume-generator/scripts/extractors/__pycache__/
+
+# Optional sample resume corpus (download via scripts/download_sample_resumes.py)
+skills/tech-resume-generator/assets/sample_resumes/**
+!skills/tech-resume-generator/assets/sample_resumes/README.md
+!skills/tech-resume-generator/assets/sample_resumes/download_manifest.json
+
+# Eval run artifacts (fixtures + evals.json stay tracked)
+evals-workspace/
