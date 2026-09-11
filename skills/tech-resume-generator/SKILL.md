@@ -5,10 +5,12 @@ description: >-
   technical / SWE / engineering resume or CV from career materials (old resumes,
   LinkedIn exports, PDFs, images, Markdown, certs, or notes)—including casual
   asks like "make my resume better," "ATS-friendly," "one-pager for internships,"
-  or "customize this for a job posting." Produces a one-page ATS-safe tech resume
-  as JSON + PDF (general or JD-tailored). Do not use for cover letters alone,
-  LinkedIn profile rewrites, recruiter cold emails, interview prep, or non-tech
-  CVs unless the user also wants a tech resume.
+  or "customize this for a job posting." Workspace I/O lives under
+  tech-resume-generator_files/{user_professional_data,job_description_data,output}/
+  (not user_data/). Produces a one-page ATS-safe tech resume as JSON + PDF
+  (general or JD-tailored). Do not use for cover letters alone, LinkedIn profile
+  rewrites, recruiter cold emails, interview prep, or non-tech CVs unless the
+  user also wants a tech resume.
 license: MIT
 compatibility: >-
   Requires Node.js 18+ and `npm install` inside this skill directory (pdf-lib).
@@ -16,7 +18,7 @@ compatibility: >-
   text extraction. Works in any Agent Skills–compatible client.
 metadata:
   author: Baber Arjumand
-  version: "1.4.0"
+  version: "1.4.1"
   open-standard: agentskills.io
 ---
 
@@ -51,12 +53,13 @@ At the **project / workspace root** (not inside this skill folder):
 
 ```
 tech-resume-generator_files/
-  user_professional_data/   # career materials
+  user_professional_data/   # career materials (input)
   job_description_data/     # job postings (JD-tailored mode)
   output/                   # generated JSON + PDF + professional_data.md
 ```
 
-`init_workspace.mjs` creates these folders and a `README.md` in each (does not overwrite existing READMEs).
+`init_workspace.mjs` creates these folders and a `README.md` in each (does not overwrite existing READMEs).  
+**Do not use a legacy `user_data/` folder** — inputs and outputs belong under `tech-resume-generator_files/` only.
 
 ### Ask first (required)
 
@@ -64,10 +67,18 @@ Before reading files, ask:
 
 > Do you want a **general** optimized tech resume, or a resume **tailored to a job description**?
 
+Then confirm the workspace folders (created by `init_workspace.mjs` at the **workspace root**, sibling to where this skill is installed—not inside the skill folder):
+
+| Folder | Purpose |
+| --- | --- |
+| `tech-resume-generator_files/user_professional_data/` | Career materials (resumes, LinkedIn, certs, notes) |
+| `tech-resume-generator_files/job_description_data/` | Job postings for JD-tailored mode |
+| `tech-resume-generator_files/output/` | Generated `professional_data.md`, résumé JSON, and PDFs |
+
 If **JD-tailored** and no JD is present yet, ask how they will provide it:
 
 - paste into chat (then save under `tech-resume-generator_files/job_description_data/`), or
-- add files under `tech-resume-generator_files/job_description_data/`
+- add one or more files under `tech-resume-generator_files/job_description_data/` (e.g. `job_description.md`, `.txt`, `.pdf`, or multiple postings)
 
 Do not invent a target role or JD.
 
