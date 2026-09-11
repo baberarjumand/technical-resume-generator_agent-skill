@@ -8,9 +8,9 @@ description: >-
   or "customize this for a job posting." Workspace I/O lives under
   tech-resume-generator_files/{user_professional_data,job_description_data,output}/
   (not user_data/). Produces a one-page ATS-safe tech resume as JSON + PDF
-  (general or JD-tailored). Do not use for cover letters alone, LinkedIn profile
-  rewrites, recruiter cold emails, interview prep, or non-tech CVs unless the
-  user also wants a tech resume.
+  named general_generated_resume.pdf or tailored_generated_resume.pdf. Do not use
+  for cover letters alone, LinkedIn profile rewrites, recruiter cold emails,
+  interview prep, or non-tech CVs unless the user also wants a tech resume.
 license: MIT
 compatibility: >-
   Requires Node.js 18+ and `npm install` inside this skill directory (pdf-lib).
@@ -18,7 +18,7 @@ compatibility: >-
   text extraction. Works in any Agent Skills–compatible client.
 metadata:
   author: Baber Arjumand
-  version: "1.4.1"
+  version: "1.5.0"
   open-standard: agentskills.io
 ---
 
@@ -61,40 +61,76 @@ tech-resume-generator_files/
 `init_workspace.mjs` creates these folders and a `README.md` in each (does not overwrite existing READMEs).  
 **Do not use a legacy `user_data/` folder** — inputs and outputs belong under `tech-resume-generator_files/` only.
 
-### Ask first (required)
+### Interaction order (required — do not skip or reorder)
 
-Before reading files, ask:
+Follow these gates **in order**. Do not extract, compile, or generate until the user confirms the relevant file list(s). Do not invent a target role or JD.
+
+#### 1. Collect career materials
+
+Ask the user to add their career files into:
+
+`tech-resume-generator_files/user_professional_data/`
+
+Tell them what belongs there (old resumes, LinkedIn exports, certs, notes, PDFs, images, etc.). Wait until they say they have uploaded / added the files (or that files are already there).
+
+#### 2. Confirm career file list
+
+List every file found under `user_professional_data/` (relative paths; skip `README.md` / `.gitkeep` / `_extracted/` unless the user put sources there). Ask:
+
+> Here are the career files I found. Are these the correct files to use?
+
+Do **not** continue until the user confirms. If they say no, wait for them to add/remove files and re-list until they confirm.
+
+#### 3. Choose mode
+
+Only after career-file confirmation, ask:
 
 > Do you want a **general** optimized tech resume, or a resume **tailored to a job description**?
 
-Then confirm the workspace folders (created by `init_workspace.mjs` at the **workspace root**, sibling to where this skill is installed—not inside the skill folder):
+#### 4. If JD-tailored — collect and confirm JD files
 
-| Folder | Purpose |
-| --- | --- |
-| `tech-resume-generator_files/user_professional_data/` | Career materials (resumes, LinkedIn, certs, notes) |
-| `tech-resume-generator_files/job_description_data/` | Job postings for JD-tailored mode |
-| `tech-resume-generator_files/output/` | Generated `professional_data.md`, résumé JSON, and PDFs |
+Instruct the user to add job description file(s) into:
 
-If **JD-tailored** and no JD is present yet, ask how they will provide it:
+`tech-resume-generator_files/job_description_data/`
 
-- paste into chat (then save under `tech-resume-generator_files/job_description_data/`), or
-- add one or more files under `tech-resume-generator_files/job_description_data/` (e.g. `job_description.md`, `.txt`, `.pdf`, or multiple postings)
+Wait for upload. Then list every file under `job_description_data/` (skip `README.md` / `.gitkeep`) and ask:
 
-Do not invent a target role or JD.
+> Here are the job description files I found. Are these the correct files to use?
+
+Do **not** generate until they confirm. If they decline, wait for changes and re-list.
+
+(If they already pasted a JD in chat, save it under `job_description_data/` as a file, include it in the list, and still get confirmation.)
+
+#### 5. Generate
+
+After confirmations (and mode choice), run extract → compile → author JSON → render PDF (steps below).
+
+#### 6. Deliver
+
+Tell the user exactly where the artifacts are:
+
+| Mode | PDF path | JSON path |
+| --- | --- | --- |
+| General | `tech-resume-generator_files/output/general_generated_resume.pdf` | `…/output/general_generated_resume.json` |
+| JD-tailored | `tech-resume-generator_files/output/tailored_generated_resume.pdf` | `…/output/tailored_generated_resume.json` |
+
+Also mention `tech-resume-generator_files/output/professional_data.md`.
 
 ### Checklist
 
 ```
 Resume generation (repo):
 - [ ] init_workspace succeeded → tech-resume-generator_files/ present
+- [ ] User asked to place files in user_professional_data/
+- [ ] Career file list shown + user confirmed
 - [ ] Mode chosen (general | JD-tailored)
-- [ ] JD obtained if tailored (job_description_data/)
-- [ ] user_professional_data/ inventoried
+- [ ] If tailored: user asked to place JD in job_description_data/
+- [ ] If tailored: JD file list shown + user confirmed
 - [ ] Extraction complete (or new extractors written)
-- [ ] tech-resume-generator_files/output/professional_data.md compiled
-- [ ] Resume JSON written under output/general or output/tailored
-- [ ] PDF rendered; overflow fixed
-- [ ] Paths delivered to user
+- [ ] output/professional_data.md compiled
+- [ ] Resume JSON written (general_generated_resume.json or tailored_generated_resume.json)
+- [ ] PDF rendered with matching name; overflow fixed
+- [ ] Output paths delivered to user
 ```
 
 ### Input contract
@@ -110,13 +146,13 @@ Paths are relative to this skill directory. Data folders live under workspace `t
 | Script | When to run |
 | --- | --- |
 | `scripts/init_workspace.mjs` | **First** — create `tech-resume-generator_files/{user_professional_data,job_description_data,output}/` |
-| `scripts/extract_user_data.py` | Inventory + extract `user_professional_data/` |
+| `scripts/extract_user_data.py` | After career-file confirmation — inventory + extract `user_professional_data/` |
 | `scripts/generate_resume_pdf.mjs` | After writing resume JSON — render sibling `.pdf` |
 | `scripts/eval_grade.py` / `eval_aggregate.py` | Eval suite |
 | `scripts/download_sample_resumes.py` | Optional samples |
 | `scripts/extractors/<format>_extract.py` | Unsupported formats |
 
-### Steps
+### Generation steps (after confirmations)
 
 #### 1. Inventory and extract
 
@@ -151,10 +187,14 @@ Then load **only** what the case needs:
 
 **Defaults (experienced industry SWE):** one page, ≥0.5" margins, single column, Helvetica/Arial/Calibri; skills → experience → education; ownership verb + tech + metric; JD mode = true keywords only.
 
-#### 4. Author resume JSON
+#### 4. Author resume JSON (fixed names)
 
-- General: `tech-resume-generator_files/output/general/<slug>_resume.json`
-- Tailored: `tech-resume-generator_files/output/tailored/<job-slug>/<slug>_resume.json`
+Write exactly one of:
+
+- General: `tech-resume-generator_files/output/general_generated_resume.json`
+- Tailored: `tech-resume-generator_files/output/tailored_generated_resume.json`
+
+If multiple JD files were confirmed, produce **one** tailored résumé that reflects the confirmed posting set (ask which posting is primary if they conflict). Do not invent employers from the JD.
 
 #### 5. Render PDF
 
@@ -163,28 +203,38 @@ npm install   # once, in this skill directory
 node scripts/generate_resume_pdf.mjs <path-to-resume.json>
 ```
 
+The renderer writes a sibling PDF with the same basename, so you get:
+
+- `general_generated_resume.pdf` or
+- `tailored_generated_resume.pdf`
+
 Fix layout overflow until the page fits.
 
 #### 6. Deliver
 
-Report paths under `tech-resume-generator_files/output/`.
+Report the full paths to the PDF, JSON, and `professional_data.md`.
 
 ---
 
 ## Browser workflow
 
-Use when `init_workspace.mjs` fails or there is no project filesystem.
+Use when `init_workspace.mjs` fails or there is no project filesystem. Same **interaction order**, adapted for chat uploads:
 
-1. Ask **general vs JD-tailored** (same as repo).
-2. Ask the user to **upload/attach** career files (and JD if tailored) in chat — there is no `tech-resume-generator_files/` folder.
-3. Compile facts and produce résumé **JSON** and/or **Markdown** in the conversation (and downloadable artifacts if the host allows).
-4. If PDF cannot be rendered in-chat, tell the user to save the JSON and run locally:
+1. Ask the user to **upload/attach** career files in chat.
+2. List the uploaded career files and ask for confirmation before continuing.
+3. Ask **general vs JD-tailored**.
+4. If tailored: ask them to upload JD file(s) (or paste the JD); list what you received; wait for confirmation.
+5. Compile facts and produce résumé **JSON** + **PDF** when possible.
+   - Prefer downloadable filenames: `general_generated_resume.pdf` or `tailored_generated_resume.pdf`.
+   - If the host cannot render PDF, provide the JSON as `general_generated_resume.json` / `tailored_generated_resume.json` and a Markdown draft, then tell them to run locally:
 
 ```bash
-node scripts/generate_resume_pdf.mjs path/to/resume.json
+node scripts/generate_resume_pdf.mjs path/to/general_generated_resume.json
+# or
+node scripts/generate_resume_pdf.mjs path/to/tailored_generated_resume.json
 ```
 
-5. Still never invent metrics/employers; still one-page ATS rules.
+6. Still never invent metrics/employers; still one-page ATS rules.
 
 ---
 
@@ -193,7 +243,7 @@ node scripts/generate_resume_pdf.mjs path/to/resume.json
 Follow [Evaluating skill output quality](https://agentskills.io/skill-creation/evaluating-skills). When evaluating this skill:
 
 1. Read [evals/evals.json](evals/evals.json) and fixtures under [evals/files/](evals/files/).
-2. Write artifacts to `evals-workspace/iteration-N/eval-<slug>/with_skill/outputs/` (same shape as `tech-resume-generator_files/output/`).
+2. Write artifacts to `evals-workspace/iteration-N/eval-<slug>/with_skill/outputs/` (same filenames as `tech-resume-generator_files/output/`).
 3. Grade with `scripts/eval_grade.py`; aggregate with `scripts/eval_aggregate.py`.
 4. Description triggers: [evals/trigger_queries.json](evals/trigger_queries.json).
 
@@ -208,9 +258,11 @@ Details: [evals/README.md](evals/README.md).
 - **Script paths are skill-relative**; workspace paths are under the project root.
 - **`.docx` is not auto-extracted** — write an extractor when needed.
 - After `npx skills add`, run `npm install` inside the skill directory before PDF rendering.
+- **Fixed output names:** always `general_generated_resume.pdf` or `tailored_generated_resume.pdf` (plus matching `.json`).
 
 ## Hard constraints
 
 - No invented certifications, tools, metrics, or employers
 - No street address, photo, DOB, or Expert/Beginner proficiency labels on the résumé
 - One page for industry SWE unless the user explicitly needs an academic CV / AU 2-page CV
+- Career files confirmed before mode question; JD files confirmed before tailored generation

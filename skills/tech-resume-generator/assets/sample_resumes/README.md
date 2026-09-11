@@ -13,4 +13,4 @@ python3 scripts/download_sample_resumes.py
 
 Index: [`download_manifest.json`](./download_manifest.json).
 
-Downloaded files are gitignored. **Never copy** names, schools, or bullets from samples into a user’s résumé.
+Downloaded files are gitignored. **Never copy** names, schools, or bullets from samples into a user’s résumé. Samples are layout/density references only — final deliverables remain `general_generated_resume.pdf` or `tailored_generated_resume.pdf` under `tech-resume-generator_files/output/`.

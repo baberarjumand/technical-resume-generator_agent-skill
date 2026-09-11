@@ -28,9 +28,13 @@ evals-workspace/iteration-1/
 ### Agent / human loop
 
 1. For each eval in `evals.json`, start a **clean** session.
-2. With skill activated, run the `prompt` using fixtures in `files/` (copy into a temp `tech-resume-generator_files/user_professional_data/` or point the agent at `evals/files/...`).
-3. Save artifacts into `evals-workspace/iteration-N/eval-<slug>/with_skill/outputs/` mirroring workspace `output/` (`professional_data.md`, `general/*.json`, etc.).
-4. Grade:
+2. With skill activated, run the `prompt` using fixtures in `files/` (copy into a temp `tech-resume-generator_files/user_professional_data/` / `job_description_data/` or point the agent at `evals/files/...`).
+3. Interactive gates (file-list confirmation, mode question) still apply unless the prompt already states mode and fixture paths; for automated runs you may pre-answer those confirmations in the eval transcript.
+4. Save artifacts into `evals-workspace/iteration-N/eval-<slug>/with_skill/outputs/` as:
+   - `professional_data.md`
+   - `general_generated_resume.json` (+ `.pdf`) **or**
+   - `tailored_generated_resume.json` (+ `.pdf`)
+5. Grade:
 
 ```bash
 python3 scripts/eval_grade.py \
@@ -40,13 +44,13 @@ python3 scripts/eval_grade.py \
   --workspace ../../evals-workspace/iteration-1/eval-general-experienced/with_skill
 ```
 
-5. Aggregate:
+6. Aggregate:
 
 ```bash
 python3 scripts/eval_aggregate.py --iteration ../../evals-workspace/iteration-1
 ```
 
-6. Fix `SKILL.md` / scripts from failed assertions; open `iteration-2/` and repeat.
+7. Fix `SKILL.md` / scripts from failed assertions; open `iteration-2/` and repeat.
 
 ### Programmatic grade only
 

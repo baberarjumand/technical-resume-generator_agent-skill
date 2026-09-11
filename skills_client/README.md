@@ -34,3 +34,7 @@ This repo exposes the skill at:
 ```
 
 Compatible agents that scan `.agents/skills/` (see [quickstart](https://agentskills.io/skill-creation/quickstart)) will discover it automatically.
+
+## Using the activated skill
+
+After activate/slash, the agent should follow `SKILL.md`: confirm files in `tech-resume-generator_files/user_professional_data/` → ask general vs JD-tailored → (if tailored) confirm `job_description_data/` → write `general_generated_resume.pdf` or `tailored_generated_resume.pdf` under `output/`.

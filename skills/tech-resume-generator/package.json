@@ -1,9 +1,9 @@
 {
   "name": "tech-resume-generator",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.5.0",
   "type": "module",
-  "description": "Agent skill: generate ATS-safe tech resumes; workspace under tech-resume-generator_files/{user_professional_data,job_description_data,output}",
+  "description": "Agent skill: general_generated_resume.pdf / tailored_generated_resume.pdf under tech-resume-generator_files/output/",
   "license": "MIT",
   "engines": {
     "node": ">=18"

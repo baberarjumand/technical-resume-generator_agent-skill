@@ -9,6 +9,13 @@ tech-resume-generator_files/
   output/                   # generated resumes
 ```
 
+## Interaction order
+
+1. User places career files in `user_professional_data/` → agent lists them → user confirms  
+2. Agent asks general vs JD-tailored  
+3. If tailored: user places JD files in `job_description_data/` → agent lists them → user confirms  
+4. Agent generates under `output/` with fixed names (below)
+
 ## user_professional_data/
 
 Any mix of:
@@ -26,11 +33,7 @@ Subfolders are fine. The agent inventories everything recursively. **Do not skip
 
 **General resume:** no JD required.
 
-**JD-tailored resume:** provide the posting via one of:
-
-1. Paste into chat when the agent asks (agent may save a copy here)
-2. Files in this folder (`.md`, `.txt`, `.pdf`, etc.)
-3. Multiple postings in subfolders as needed
+**JD-tailored resume:** after mode choice, provide the posting via files in this folder (`.md`, `.txt`, `.pdf`, etc.). The agent lists them and waits for confirmation before generating. Pasted JD text should be saved here as a file first.
 
 ## Privacy
 
@@ -38,8 +41,14 @@ Do not commit personal documents to a public repo. Keep folder *contents* gitign
 
 ## Outputs
 
-Compiled facts and resumes are written under **`tech-resume-generator_files/output/`**, not inside the skill package.
+Written under **`tech-resume-generator_files/output/`** (not inside the skill package):
+
+| File | When |
+| --- | --- |
+| `professional_data.md` | Always after extract/compile |
+| `general_generated_resume.json` + `.pdf` | General mode |
+| `tailored_generated_resume.json` + `.pdf` | JD-tailored mode |
 
 ## Browser hosts
 
-Browser chats have no project folder — upload files in chat instead. See the skill’s Browser workflow.
+Browser chats have no project folder — upload files in chat instead; same confirm → mode → (JD confirm) → deliver PDF download order. See the skill’s Browser workflow.

@@ -1,9 +1,9 @@
 {
   "name": "skill-tech-resume-generator",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.5.0",
   "type": "module",
-  "description": "Agent skill that generates optimized one-page tech resumes from tech-resume-generator_files/{user_professional_data,job_description_data,output}",
+  "description": "Agent skill that generates general_generated_resume.pdf / tailored_generated_resume.pdf from tech-resume-generator_files/",
   "scripts": {
     "generate-resume": "node skills/tech-resume-generator/scripts/generate_resume_pdf.mjs",
     "init-workspace": "node skills/tech-resume-generator/scripts/init_workspace.mjs",

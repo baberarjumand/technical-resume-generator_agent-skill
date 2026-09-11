@@ -2,13 +2,15 @@
 
 Paths below are relative to the **skill directory** (`tech-resume-generator/`). Data folders live under the workspace root in `tech-resume-generator_files/`.
 
+**Agent usage order:** `init_workspace` → user adds career files → confirm list → ask general vs JD-tailored → (if tailored) confirm JD files → `extract_user_data.py` → write `general_generated_resume.json` or `tailored_generated_resume.json` → `generate_resume_pdf.mjs`.
+
 ## `init_workspace.mjs`
 
 Creates `<workspace>/tech-resume-generator_files/` with:
 
 - `user_professional_data/` — career materials  
 - `job_description_data/` — job postings  
-- `output/` — generated résumés  
+- `output/` — `general_generated_resume.pdf` / `tailored_generated_resume.pdf` (+ JSON)
 
 Each folder gets a `README.md` (existing READMEs are left unchanged).
 
@@ -53,14 +55,14 @@ Renders a one-page Letter résumé PDF from JSON (sibling `.pdf`).
 ```bash
 node scripts/generate_resume_pdf.mjs --help
 npm install   # once, in this skill directory (pdf-lib)
-node scripts/generate_resume_pdf.mjs /path/to/workspace/tech-resume-generator_files/output/general/name_resume.json
+node scripts/generate_resume_pdf.mjs /path/to/workspace/tech-resume-generator_files/output/general_generated_resume.json
 ```
 
 From the cloned repo root (postinstall installs skill deps):
 
 ```bash
 npm install
-npm run generate-resume -- output/general/name_resume.json
+npm run generate-resume -- tech-resume-generator_files/output/general_generated_resume.json
 ```
 
 JSON shape: [../references/json_schema.md](../references/json_schema.md). Requires Node.js 18+ and `pdf-lib`.

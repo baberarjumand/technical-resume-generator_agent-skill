@@ -28,6 +28,4 @@ Do not commit personal documents to a public repo. Prefer gitignoring contents o
 
 ## Next step
 
-After adding files, ask your agent:
-
-> Use the tech-resume-generator skill to generate my tech resume.
+After adding files, ask your agent to use **tech-resume-generator**. It will list the files it finds here and ask you to confirm them before choosing general vs JD-tailored.

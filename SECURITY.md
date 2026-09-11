@@ -4,8 +4,12 @@ This repository publishes an [Agent Skills](https://agentskills.io/) package (`s
 
 ## What the skill does
 
-- Reads career materials you place in workspace `tech-resume-generator_files/user_professional_data/` (or files you upload in chat).
-- Writes compiled facts and résumé artifacts under workspace `tech-resume-generator_files/output/`.
+- Reads career materials you place in workspace `tech-resume-generator_files/user_professional_data/` (or files you upload in chat), after you confirm the listed files.
+- Optionally reads job postings from `tech-resume-generator_files/job_description_data/` (JD-tailored mode), after you confirm that list.
+- Writes compiled facts and résumé artifacts under workspace `tech-resume-generator_files/output/` as:
+  - `professional_data.md`
+  - `general_generated_resume.json` + `general_generated_resume.pdf`, or
+  - `tailored_generated_resume.json` + `tailored_generated_resume.pdf`
 - Optionally grades eval fixtures under `evals-workspace/`.
 
 It does **not** phone home, create accounts, or submit job applications.
@@ -23,7 +27,7 @@ It does **not** phone home, create accounts, or submit job applications.
 
 ## Trust boundaries
 
-- Treat `tech-resume-generator_files/user_professional_data/` and `output/` as sensitive. Do not commit them to a public fork.
+- Treat `tech-resume-generator_files/user_professional_data/`, `job_description_data/`, and `output/` as sensitive. Do not commit them to a public fork.
 - Prefer `npx skills add … --list` to inspect discovered skills before install.
 - Prefer `--copy` over symlinks on Windows if link creation fails.
 - skills.sh may run automated security audits; report issues via [security.vercel.com](https://security.vercel.com) for the ecosystem, and open a GitHub issue on this repo for package-specific problems.

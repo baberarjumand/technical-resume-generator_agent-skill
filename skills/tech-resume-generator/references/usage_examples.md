@@ -4,67 +4,54 @@
 
 **User**
 
-> I put my old resumes, LinkedIn PDFs, and certs in `tech-resume-generator_files/user_professional_data/`. Please use tech-resume-generator to make my resume.
+> Please use tech-resume-generator to make my resume.
 
 **Agent**
 
 1. Runs `init_workspace.mjs` if needed (repo probe); on success continues with **repo workflow**.
-2. Asks: general vs JD-tailored → user picks **general**.
-3. Runs `scripts/extract_user_data.py` on `tech-resume-generator_files/user_professional_data/`.
-4. Writes `tech-resume-generator_files/output/professional_data.md`.
-5. Applies `99_cross-source-rules.md`; writes `tech-resume-generator_files/output/general/jane_doe_resume.json`.
-6. Renders PDF; trims on overflow; delivers paths.
+2. Asks the user to put career files in `tech-resume-generator_files/user_professional_data/`.
+3. Lists files found there; waits for confirmation.
+4. Asks: general vs JD-tailored → user picks **general**.
+5. Extracts, compiles `output/professional_data.md`, writes `output/general_generated_resume.json`, renders `output/general_generated_resume.pdf`.
+6. Delivers those paths.
 
-## Example 2 — JD-tailored (paste)
-
-**User**
-
-> Generate a tailored tech resume for this posting: [pastes JD for Staff Frontend Engineer at Acme].
-
-**Agent**
-
-1. Confirms mode = **JD-tailored** (JD already in chat; may save under `job_description_data/`).
-2. Extracts and compiles facts from `user_professional_data/`.
-3. Authors `tech-resume-generator_files/output/tailored/acme-staff-frontend/jane_doe_resume.json` with Acme keywords only where true.
-4. Renders PDF; delivers paths.
-
-## Example 3 — JD file on disk
+## Example 2 — JD-tailored
 
 **User**
 
-> I added a posting under `tech-resume-generator_files/job_description_data/`. Make a tailored resume.
+> Make me a job-tailored tech resume.
 
 **Agent**
 
-1. Confirms tailored mode.
-2. Reads the JD from `job_description_data/`.
-3. Compiles facts; writes tailored JSON under `output/tailored/<slug>/`.
-4. Renders PDF.
+1. Collects + confirms career files under `user_professional_data/` first.
+2. Asks mode → user picks **JD-tailored**.
+3. Instructs upload to `job_description_data/`; lists files; waits for confirmation.
+4. Authors `output/tailored_generated_resume.json` (keywords only where true); renders `output/tailored_generated_resume.pdf`.
+5. Delivers paths.
 
-## Example 4 — Batch JD tailor
+## Example 3 — Files already on disk
 
 **User**
 
-> Tailor resumes for everything in `tech-resume-generator_files/job_description_data/`.
+> I already dropped resumes into user_professional_data/.
 
 **Agent**
 
-1. Lists each file under `job_description_data/`.
-2. Produces one tailored folder per posting under `output/tailored/`.
-3. Still only true facts from `user_professional_data/`.
+1. Lists those files and asks for confirmation (does not skip this step).
+2. Continues with mode question, then generation with fixed output names.
 
-## Example 5 — Unsupported format
+## Example 4 — Unsupported format
 
 **User**
 
-> I dropped an `.odt` resume and a Notion HTML export into `user_professional_data/`.
+> I dropped an `.odt` resume into `user_professional_data/`.
 
 **Agent**
 
-1. Runs `extract_user_data.py`; sees them listed under `unsupported` in `manifest.json`.
+1. After file-list confirmation, runs `extract_user_data.py`; sees it under `unsupported` in `manifest.json`.
 2. Writes extractors under `scripts/extractors/`, runs them, continues.
 
-## Example 6 — Browser chat
+## Example 5 — Browser chat
 
 **User** (Claude.ai / ChatGPT web)
 
@@ -73,5 +60,6 @@
 **Agent**
 
 1. `init_workspace.mjs` fails or is unavailable → **browser workflow**.
-2. Uses uploads as career sources; asks general vs JD-tailored.
-3. Returns JSON/Markdown draft; suggests local PDF render if needed.
+2. Lists uploaded career files; waits for confirmation.
+3. Asks general vs JD-tailored; if tailored, collects JD uploads and confirms.
+4. Presents `general_generated_resume.pdf` or `tailored_generated_resume.pdf` for download when possible (else JSON + local render instructions).

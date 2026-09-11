@@ -20,8 +20,8 @@ Any mix of:
 
 ## How the skill uses this
 
-- **General mode:** ignores this folder (unless you later ask to tailor).
-- **JD-tailored mode:** reads one or more files here and emphasizes true keywords / ordering from your `user_professional_data/` only — never invents employers or metrics from the JD.
+- **General mode:** ignores this folder.
+- **JD-tailored mode:** after you confirm career files and choose tailored, the agent asks you to add postings here, lists them, and waits for confirmation — then emphasizes true keywords / ordering from your `user_professional_data/` only (never invents employers or metrics from the JD).
 
 ## What *not* to put here
 

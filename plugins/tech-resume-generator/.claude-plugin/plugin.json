@@ -1,7 +1,7 @@
 {
   "name": "tech-resume-generator",
-  "version": "1.0.0",
-  "description": "Generate optimized one-page ATS-safe tech resumes (JSON + PDF) from career materials — general or JD-tailored.",
+  "version": "1.5.0",
+  "description": "Confirm career (and JD) files, then generate general_generated_resume.pdf or tailored_generated_resume.pdf — one-page ATS-safe tech resumes.",
   "author": {
     "name": "Baber Arjumand",
     "url": "https://baberarjumand.com"

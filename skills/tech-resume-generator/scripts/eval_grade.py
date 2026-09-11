@@ -36,6 +36,11 @@ def load_evals(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def find_named_resume(output_dir: Path, stem: str) -> Path | None:
+    candidate = output_dir / f"{stem}.json"
+    return candidate if candidate.is_file() else None
+
+
 def find_json_resumes(output_dir: Path, sub: str | None = None) -> list[Path]:
     root = output_dir / sub if sub else output_dir
     if not root.exists():
@@ -72,13 +77,17 @@ def blob(data: dict) -> str:
 def grade_case(case: dict, output_dir: Path, workspace: Path) -> dict:
     results = []
     pd = output_dir / "professional_data.md"
-    general = find_json_resumes(output_dir, "general")
-    tailored = find_json_resumes(output_dir, "tailored")
+    general_named = find_named_resume(output_dir, "general_generated_resume")
+    tailored_named = find_named_resume(output_dir, "tailored_generated_resume")
+    general = ([general_named] if general_named else []) + find_json_resumes(output_dir, "general")
+    tailored = ([tailored_named] if tailored_named else []) + find_json_resumes(output_dir, "tailored")
     any_resume = general + tailored + find_json_resumes(output_dir)
     # de-dupe
     seen = set()
     resumes = []
     for p in any_resume:
+        if p.name == "professional_data.md":
+            continue
         if p.resolve() not in seen:
             seen.add(p.resolve())
             resumes.append(p)
@@ -118,10 +127,20 @@ def grade_case(case: dict, output_dir: Path, workspace: Path) -> dict:
             if ok and "jordan lee" in a:
                 name_ok = "jordan lee" in pd.read_text(encoding="utf-8").lower()
             add(assertion, ok and name_ok, f"exists={ok} name_match={name_ok} path={pd}")
+        elif "json exists as output/general_generated_resume.json" in a and "or output/tailored" in a:
+            add(
+                assertion,
+                general_named is not None or tailored_named is not None or len(resumes) > 0,
+                f"general={general_named} tailored={tailored_named} found={len(resumes)}",
+            )
+        elif "json exists as output/general_generated_resume.json" in a:
+            add(assertion, general_named is not None or len(general) > 0, f"path={general_named} legacy={general}")
+        elif "json exists as output/tailored_generated_resume.json" in a:
+            add(assertion, tailored_named is not None or len(tailored) > 0, f"path={tailored_named} legacy={tailored}")
         elif "json exists under output/general" in a:
-            add(assertion, len(general) > 0, f"found={len(general)} files={general}")
+            add(assertion, general_named is not None or len(general) > 0, f"found={len(general)} files={general}")
         elif "json exists under output/tailored" in a:
-            add(assertion, len(tailored) > 0, f"found={len(tailored)} files={tailored}")
+            add(assertion, tailored_named is not None or len(tailored) > 0, f"found={len(tailored)} files={tailored}")
         elif "json exists under output/general/ or output/tailored" in a:
             add(assertion, len(resumes) > 0, f"found={len(resumes)}")
         elif "validates against the generate_resume_pdf schema" in a:

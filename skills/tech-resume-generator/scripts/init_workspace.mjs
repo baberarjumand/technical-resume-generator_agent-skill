@@ -150,7 +150,7 @@ function initWorkspace(root) {
   }
 
   console.log(`Workspace ready at: ${base}`)
-  console.log('Add career files under user_professional_data/, JDs under job_description_data/, then run tech-resume-generator.')
+  console.log('Add career files under user_professional_data/, confirm the list with the agent, then choose general vs JD-tailored.')
 }
 
 const isDirectRun = (() => {
