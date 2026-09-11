@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Extract text and file inventories from a user_data folder.
+"""Extract text and file inventories from a career-materials folder.
 
 Usage (from inside the skill folder):
   python3 scripts/extract_user_data.py --help
-  python3 scripts/extract_user_data.py --input ../../user_data --output ../../user_data/_extracted
+  python3 scripts/extract_user_data.py \\
+    --input ../../tech-resume-generator_files/user_professional_data \\
+    --output ../../tech-resume-generator_files/user_professional_data/_extracted
 
 From the repo / workspace root:
   python3 skills/tech-resume-generator/scripts/extract_user_data.py \\
-    --input user_data --output user_data/_extracted
+    --input tech-resume-generator_files/user_professional_data \\
+    --output tech-resume-generator_files/user_professional_data/_extracted
 
 Writes:
   - text/          selectable PDF text and copied plaintext sources
@@ -220,8 +223,9 @@ def main() -> None:
         ),
         epilog=(
             "Examples:\n"
-            "  python3 scripts/extract_user_data.py --input ../../user_data "
-            "--output ../../user_data/_extracted\n"
+            "  python3 scripts/extract_user_data.py "
+            "--input ../../tech-resume-generator_files/user_professional_data "
+            "--output ../../tech-resume-generator_files/user_professional_data/_extracted\n"
             "  python3 scripts/extract_user_data.py --help\n"
             "Exit codes: 0 success, 1 missing input or fatal error."
         ),
@@ -230,8 +234,8 @@ def main() -> None:
     parser.add_argument(
         "--input",
         type=Path,
-        default=Path("user_data"),
-        help="Input folder (workspace user_data/). Default: user_data",
+        default=Path("tech-resume-generator_files/user_professional_data"),
+        help="Input folder (career materials). Default: tech-resume-generator_files/user_professional_data",
     )
     parser.add_argument(
         "--output",

@@ -4,8 +4,8 @@ This repository publishes an [Agent Skills](https://agentskills.io/) package (`s
 
 ## What the skill does
 
-- Reads career materials you place in workspace `user_data/` (or files you upload in chat).
-- Writes compiled facts and résumé artifacts under workspace `output/`.
+- Reads career materials you place in workspace `tech-resume-generator_files/user_professional_data/` (or files you upload in chat).
+- Writes compiled facts and résumé artifacts under workspace `tech-resume-generator_files/output/`.
 - Optionally grades eval fixtures under `evals-workspace/`.
 
 It does **not** phone home, create accounts, or submit job applications.
@@ -15,14 +15,15 @@ It does **not** phone home, create accounts, or submit job applications.
 | Script | Network | Filesystem | Notes |
 | --- | --- | --- | --- |
 | `scripts/generate_resume_pdf.mjs` | No | Reads a résumé JSON path you pass; writes a sibling `.pdf` | Depends on `pdf-lib` (declared in the skill `package.json`) |
-| `scripts/extract_user_data.py` | No | Reads `--input` (default `user_data/`); writes `--output` (default `user_data/_extracted/`) | Optional local tools: poppler-utils, Pillow |
+| `scripts/extract_user_data.py` | No | Reads `--input` (default `tech-resume-generator_files/user_professional_data/`); writes `--output` (default `<input>/_extracted`) | Optional local tools: poppler-utils, Pillow |
+| `scripts/init_workspace.mjs` | No | Creates `tech-resume-generator_files/{user_professional_data,job_description_data,output}/` + READMEs under a project root you choose | Run after project install / on first repo use |
 | `scripts/eval_grade.py` / `eval_aggregate.py` | No | Reads eval fixtures / agent outputs you point at | For maintainers running the eval suite |
 | `scripts/download_sample_resumes.py` | **Yes** — HTTPS GETs listed in `assets/sample_resumes/download_manifest.json` | Writes under `assets/sample_resumes/` | Optional; not required to generate a résumé. Review URLs in the manifest before running. |
 | `scripts/extractors/*` | Varies | Agent-written helpers for unknown formats | Review any new extractor before running it |
 
 ## Trust boundaries
 
-- Treat `user_data/` as sensitive. Do not commit it to a public fork.
+- Treat `tech-resume-generator_files/user_professional_data/` and `output/` as sensitive. Do not commit them to a public fork.
 - Prefer `npx skills add … --list` to inspect discovered skills before install.
 - Prefer `--copy` over symlinks on Windows if link creation fails.
 - skills.sh may run automated security audits; report issues via [security.vercel.com](https://security.vercel.com) for the ecosystem, and open a GitHub issue on this repo for package-specific problems.

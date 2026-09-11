@@ -28,7 +28,7 @@ evals-workspace/iteration-1/
 ### Agent / human loop
 
 1. For each eval in `evals.json`, start a **clean** session.
-2. With skill activated, run the `prompt` using fixtures in `files/` (copy into a temp `user_data/` or point the agent at `evals/files/...`).
+2. With skill activated, run the `prompt` using fixtures in `files/` (copy into a temp `tech-resume-generator_files/user_professional_data/` or point the agent at `evals/files/...`).
 3. Save artifacts into `evals-workspace/iteration-N/eval-<slug>/with_skill/outputs/` mirroring workspace `output/` (`professional_data.md`, `general/*.json`, etc.).
 4. Grade:
 

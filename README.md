@@ -4,7 +4,7 @@
 
 An [Agent Skills](https://agentskills.io/) package that turns your career files into an optimized **one-page tech resume** (JSON + highlightable PDF).
 
-Drop resumes, LinkedIn exports, certs, and notes into `user_data/` (or **upload them in a browser chat**). The agent asks whether you want a **general** or **JD-tailored** résumé, compiles facts (never invents metrics), and renders an ATS-safe one-pager from research distilled across 21 public tech-resume sources.
+Drop resumes, LinkedIn exports, certs, and notes into `tech-resume-generator_files/user_professional_data/` (or **upload them in a browser chat**). The agent asks whether you want a **general** or **JD-tailored** résumé, compiles facts (never invents metrics), and renders an ATS-safe one-pager from research distilled across 21 public tech-resume sources.
 
 **Recommended for full capabilities:** Cursor or Claude Code with this repo cloned — see [Recommended environment](#recommended-environment). Browser chats are fine for drafts; see [Browser chat limitations](#browser-chat-limitations). Review [Security](#security) before installing scripts.
 
@@ -68,9 +68,9 @@ Preview without installing: `npx skills add baberarjumand/technical-resume-gener
 
 | Feature | Description |
 | --- | --- |
-| **Multi-format intake** | Accepts Markdown, text, PDF, images (PNG/JPG/WEBP), DOCX, JSON, TypeScript dumps, LinkedIn exports, certificates, and notes under `user_data/` |
-| **General + JD-tailored modes** | One optimized general résumé, or variants keyed to a pasted JD / `job_description.*` / `user_data/jobs/` |
-| **Fact compilation** | Builds `output/professional_data.md` from your sources with reconciliation rules — no invented employers, tools, or metrics |
+| **Multi-format intake** | Accepts Markdown, text, PDF, images (PNG/JPG/WEBP), DOCX, JSON, TypeScript dumps, LinkedIn exports, certificates, and notes under `tech-resume-generator_files/user_professional_data/` |
+| **General + JD-tailored modes** | One optimized general résumé, or variants keyed to a pasted JD or files under `tech-resume-generator_files/job_description_data/` |
+| **Fact compilation** | Builds `tech-resume-generator_files/output/professional_data.md` from your sources with reconciliation rules — no invented employers, tools, or metrics |
 | **ATS one-pager PDF** | Letter PDF via skill-local `pdf-lib`: ≥0.5" margins, Helvetica, clickable `tel:` / `mailto:` / https links, skills → experience → education |
 | **Editable JSON source** | Resume content lives in JSON you can tweak; re-run the renderer without rewriting from scratch |
 | **Research-backed rules** | Verbose guidelines from 21 sources + `99_cross-source-rules.md` (TIH, Jachja, Yale WHO, Penn SCO, UT What/Why/How, and more) |
@@ -79,7 +79,7 @@ Preview without installing: `npx skills add baberarjumand/technical-resume-gener
 | **Core eval suite** | 5 evals in `evals/evals.json` + grading/aggregation scripts per [evaluating-skills](https://agentskills.io/skill-creation/evaluating-skills) |
 | **Skills client** | Local discover → catalog → activate CLI per [adding-skills-support](https://agentskills.io/client-implementation/adding-skills-support) |
 | **Cross-client install** | `npx skills add …` ([skills.sh](https://skills.sh)), Claude Code marketplace, and Agent Skills folders for Claude / Cursor / ChatGPT/Codex / Gemini / Grok / DeepSeek |
-| **Privacy-friendly layout** | Career files stay in gitignored `user_data/`; skill package is separate and zip-uploadable |
+| **Privacy-friendly layout** | Career files stay under gitignored `tech-resume-generator_files/`; skill package is separate and zip-uploadable |
 
 [↑ Back to top](#table-of-contents)
 
@@ -119,6 +119,17 @@ npm install
 node scripts/generate_resume_pdf.mjs /path/to/your_resume.json
 ```
 
+**After a project install** (`npx skills add` **without** `-g`), create the workspace folders at that repo’s root:
+
+```bash
+# from the project root where you ran npx skills add
+node .agents/skills/tech-resume-generator/scripts/init_workspace.mjs
+# or:
+node .cursor/skills/tech-resume-generator/scripts/init_workspace.mjs
+```
+
+This creates `tech-resume-generator_files/{user_professional_data,job_description_data,output}/`. Put career files in `user_professional_data/`, then ask the agent to run the skill. If `init_workspace` cannot run (browser chat), upload files in chat instead — see [Browser chat limitations](#browser-chat-limitations).
+
 ### Option B — Clone the repo (full PDF + evals workflow)
 
 ```bash
@@ -127,11 +138,11 @@ cd technical-resume-generator_agent-skill
 npm install   # also installs pdf-lib inside skills/tech-resume-generator via postinstall
 ```
 
-1. Put career materials in [`user_data/`](user_data/README.md).
+1. Run `npm run init-workspace` (creates [`tech-resume-generator_files/`](tech-resume-generator_files/README.md)). Put career materials in `tech-resume-generator_files/user_professional_data/`.
 2. The skill is already linked under `.agents/skills/`, `.claude/skills/`, `.cursor/skills/`, `.codex/skills/`, and `.grok/skills/`.
 3. Ask: *Use the tech-resume-generator skill to generate my tech resume.*
 4. Choose **general** or **JD-tailored**.
-5. Find results under `output/`.
+5. Find results under `tech-resume-generator_files/output/`.
 
 Optional for PDF text extraction:
 
@@ -152,10 +163,10 @@ In that setup you get the complete loop:
 
 | Capability | Local coding CLI |
 | --- | --- |
-| Drop files in `user_data/` (and `user_data/jobs/`) | Yes |
+| Drop files in `tech-resume-generator_files/user_professional_data/` (and `job_description_data/`) | Yes |
 | Auto-discover / activate the skill from disk | Yes |
 | Run `extract_user_data.py` and write new extractors | Yes |
-| Compile `output/professional_data.md` | Yes |
+| Compile `tech-resume-generator_files/output/professional_data.md` | Yes |
 | Author resume JSON and iterate on overflow | Yes |
 | Render highlightable PDF via `generate_resume_pdf.mjs` | Yes |
 | Run the core **evals** suite | Yes |
@@ -198,7 +209,7 @@ npm run download-samples
 
 Index of URLs and paths: [`skills/tech-resume-generator/assets/sample_resumes/download_manifest.json`](skills/tech-resume-generator/assets/sample_resumes/download_manifest.json). More detail: [`assets/sample_resumes/README.md`](skills/tech-resume-generator/assets/sample_resumes/README.md).
 
-After download, ask your agent to use density examples from `assets/sample_resumes/` when optimizing layout—still facts-only from your `user_data/`.
+After download, ask your agent to use density examples from `assets/sample_resumes/` when optimizing layout—still facts-only from your `user_professional_data/`.
 
 [↑ Back to top](#table-of-contents)
 
@@ -210,7 +221,7 @@ Browser agents (Claude.ai, ChatGPT web, Gemini web, DeepSeek chat, Grok web, etc
 
 ### How to provide documents in a browser
 
-There is **no** `user_data/` folder inside a web chat. Provide career materials by:
+There is **no** `tech-resume-generator_files/` folder inside a web chat. Provide career materials by:
 
 1. **Uploading / attaching files** in the chat window (resumes, PDFs, images, notes), and/or  
 2. Adding files to **Project / Custom GPT knowledge** when the product supports it, and/or  
@@ -229,7 +240,7 @@ Then ask the agent to follow `tech-resume-generator` (after installing/uploading
 
 | Limitation | Why |
 | --- | --- |
-| No `user_data/` / `output/` on disk | Browser chats have no project filesystem like Cursor/Claude Code |
+| No `tech-resume-generator_files/` on disk | Browser chats have no project filesystem like Cursor/Claude Code |
 | No automatic skill folder discovery | `.agents/skills/` and symlinks are local; web apps need zip upload, Project knowledge, or pasted `SKILL.md` |
 | PDF rendering via `pdf-lib` | Needs Node + `npm install`; many chats cannot run that script |
 | `extract_user_data.py` / poppler extractors | Needs a real shell and optional system packages |
@@ -297,7 +308,7 @@ claude
 
 Then ask:
 
-> Use tech-resume-generator to generate my tech resume from user_data/.
+> Use tech-resume-generator to generate my tech resume from tech-resume-generator_files/.
 
 Or activate explicitly if your CLI supports slash/skills:
 
@@ -363,10 +374,10 @@ codex
 
 Ask in plain language (slash commands are not always available):
 
-> Run tech-resume-generator on user_data/ and produce a general one-page tech resume.
+> Run tech-resume-generator on tech-resume-generator_files/ and produce a general one-page tech resume.
 
 ```bash
-codex exec "Use tech-resume-generator: generate a JD-tailored resume using user_data/job_description.md"
+codex exec "Use tech-resume-generator: generate a JD-tailored resume using tech-resume-generator_files/job_description_data/"
 ```
 
 [↑ Back to top](#table-of-contents)
@@ -386,7 +397,7 @@ cd technical-resume-generator_agent-skill
 ls -la .agents/skills/tech-resume-generator
 ```
 
-> Activate tech-resume-generator and generate my resume from user_data/.
+> Activate tech-resume-generator and generate my resume from tech-resume-generator_files/.
 
 Or symlink:
 
@@ -418,6 +429,15 @@ gemini skills install https://github.com/baberarjumand/technical-resume-generato
 ## Use with Cursor
 
 ```bash
+npx skills add baberarjumand/technical-resume-generator_agent-skill -a cursor -y
+# then from that project root:
+node .agents/skills/tech-resume-generator/scripts/init_workspace.mjs
+# or: node .cursor/skills/tech-resume-generator/scripts/init_workspace.mjs
+```
+
+Or global:
+
+```bash
 npx skills add baberarjumand/technical-resume-generator_agent-skill -a cursor -g -y
 ```
 
@@ -437,7 +457,8 @@ This repo also exposes `.agents/skills/tech-resume-generator` for cross-client d
 
 1. Open the project in Cursor.
 2. Use **Agent** mode.
-3. Ask: *Use the tech-resume-generator skill to generate my tech resume.*
+3. Ask: *Use the tech-resume-generator skill to generate my tech resume.* (The skill first runs `init_workspace.mjs` if needed; if that works → repo workflow with `tech-resume-generator_files/`; otherwise → browser/upload workflow.)
+4. Put career files in `tech-resume-generator_files/user_professional_data/` (and JDs in `job_description_data/` if tailored).
 
 ```bash
 npm run skills:discover
@@ -467,7 +488,7 @@ ln -sfn "$(pwd)/skills/tech-resume-generator" ~/.grok/skills/tech-resume-generat
 grok
 ```
 
-> Use tech-resume-generator on user_data/. Ask me general vs JD-tailored first.
+> Use tech-resume-generator on tech-resume-generator_files/. Ask me general vs JD-tailored first.
 
 ### Grok web / xAI chat
 
@@ -498,15 +519,15 @@ DeepSeek chat/API surfaces typically do **not** auto-discover Agent Skills folde
    - `skills/tech-resume-generator/SKILL.md`
    - `skills/tech-resume-generator/references/json_schema.md`
    - `skills/tech-resume-generator/references/resume_guidelines/99_cross-source-rules.md`
-   - Your files from `user_data/`
+   - Your career files (or upload them in chat)
 3. Prompt:
 
 > Follow SKILL.md exactly. First ask whether I want a general or JD-tailored tech resume. Never invent metrics. Output professional_data.md and resume JSON matching the schema.
 
-4. Save the JSON into `output/general/` (or `output/tailored/<slug>/`) and render:
+4. Save the JSON into `tech-resume-generator_files/output/general/` (or `.../tailored/<slug>/`) and render:
 
 ```bash
-npm run generate-resume -- output/general/your_name_resume.json
+npm run generate-resume -- tech-resume-generator_files/output/general/your_name_resume.json
 ```
 
 If you use DeepSeek Harness / a coding CLI that scans `.agents/skills/` or `.dsh/skills/`, install with:
@@ -526,21 +547,21 @@ npx skills add baberarjumand/technical-resume-generator_agent-skill -g -y
 
 | Step | Action |
 | --- | --- |
-| 1 | Drop materials into `user_data/` (any mix of formats; subfolders OK) |
+| 1 | Run `init_workspace.mjs` if needed; drop materials into `tech-resume-generator_files/user_professional_data/` |
 | 2 | Invoke the skill in your agent |
 | 3 | Answer **general** or **JD-tailored** |
-| 4 | If tailored: paste the JD, or use `user_data/job_description.md` / `.txt` / `.pdf`, or `user_data/jobs/<slug>.*` |
-| 5 | Review `output/professional_data.md` and the JSON/PDF |
+| 4 | If tailored: paste the JD, or add files under `tech-resume-generator_files/job_description_data/` |
+| 5 | Review `tech-resume-generator_files/output/professional_data.md` and the JSON/PDF |
 
-Details: [`user_data/README.md`](user_data/README.md), [`skills/tech-resume-generator/references/user_data_contract.md`](skills/tech-resume-generator/references/user_data_contract.md).
+Details: [`tech-resume-generator_files/README.md`](tech-resume-generator_files/README.md), [`skills/tech-resume-generator/references/user_data_contract.md`](skills/tech-resume-generator/references/user_data_contract.md).
 
 ### Ways to use the skill
 
 | Mode | What you do | What you get |
 | --- | --- | --- |
-| **General résumé** | Put career files in `user_data/`; choose general | `output/general/*_resume.json` + `.pdf` |
-| **Single JD tailor** | Paste JD or add `job_description.*` | `output/tailored/<slug>/` |
-| **Batch JD tailor** | Drop multiple postings under `user_data/jobs/` | One tailored folder per posting |
+| **General résumé** | Put career files in `user_professional_data/`; choose general | `tech-resume-generator_files/output/general/*_resume.json` + `.pdf` |
+| **Single JD tailor** | Paste JD or add files under `job_description_data/` | `tech-resume-generator_files/output/tailored/<slug>/` |
+| **Batch JD tailor** | Drop multiple postings under `job_description_data/` | One tailored folder per posting |
 | **Iterate wording** | Edit the JSON; re-run the renderer | Updated PDF without re-extracting |
 | **Evaluate the skill** | Run fixtures in `evals/` | `grading.json` + `benchmark.json` |
 | **Discover/activate locally** | `npm run skills:*` | Catalog / `<skill_content>` wrap for harnesses |
@@ -548,15 +569,15 @@ Details: [`user_data/README.md`](user_data/README.md), [`skills/tech-resume-gene
 ### Example prompts
 
 ```text
-Use tech-resume-generator to generate my tech resume from user_data/.
+Use tech-resume-generator to generate my tech resume from tech-resume-generator_files/.
 ```
 
 ```text
-Generate a JD-tailored resume. The posting is in user_data/job_description.md.
+Generate a JD-tailored resume. The posting is in tech-resume-generator_files/job_description_data/.
 ```
 
 ```text
-Tailor resumes for everything in user_data/jobs/.
+Tailor resumes for everything in tech-resume-generator_files/job_description_data/.
 ```
 
 ```text
@@ -570,7 +591,7 @@ Run the tech-resume-generator eval suite for eval id 1 and grade the outputs.
 ### Render a PDF yourself
 
 ```bash
-npm run generate-resume -- output/general/your_name_resume.json
+npm run generate-resume -- tech-resume-generator_files/output/general/your_name_resume.json
 ```
 
 [↑ Back to top](#table-of-contents)
@@ -580,7 +601,7 @@ npm run generate-resume -- output/general/your_name_resume.json
 ## How it works
 
 ```
-user_data/  (PDF, images, md, LinkedIn exports, certs, …)
+tech-resume-generator_files/user_professional_data/  (PDF, images, md, LinkedIn exports, certs, …)
         │
         ▼
 ┌──────────────────┐
@@ -593,7 +614,7 @@ user_data/  (PDF, images, md, LinkedIn exports, certs, …)
 └────────┬─────────┘
          │
 ┌────────▼─────────┐
-│  Compile facts   │  output/professional_data.md
+│  Compile facts   │  tech-resume-generator_files/output/professional_data.md
 │                  │  (never invent metrics / employers)
 └────────┬─────────┘
          │
@@ -610,7 +631,7 @@ user_data/  (PDF, images, md, LinkedIn exports, certs, …)
 └────────┬─────────┘
          │
          ▼
-   output/general/  or  output/tailored/<slug>/
+   tech-resume-generator_files/output/general/  or  .../output/tailored/<slug>/
         .json + .pdf
 ```
 
@@ -672,8 +693,10 @@ technical-resume-generator_agent-skill/
 ├── .grok/skills/tech-resume-generator    -> ../../skills/...   # Grok Build
 ├── skills_client/                 # local discover / catalog / activate / slash CLI
 ├── SECURITY.md
-├── user_data/                     # YOUR career files (gitignored contents)
-├── output/                        # generated resumes (gitignored contents)
+├── tech-resume-generator_files/   # workspace I/O (created by init_workspace.mjs)
+│   ├── user_professional_data/    # YOUR career files
+│   ├── job_description_data/      # job postings
+│   └── output/                    # generated resumes
 └── evals-workspace/               # eval run artifacts (gitignored)
 ```
 
@@ -724,19 +747,19 @@ An Agent Skill that compiles your career materials into an optimized one-page AT
 Any host that supports Agent Skills or can follow an attached `SKILL.md` — Claude, Cursor, ChatGPT/Codex, Gemini, Grok, DeepSeek, and similar tools. Support depth varies; see the per-product sections above. For the **full** extract → JSON → PDF loop, prefer a local coding CLI ([Recommended environment](#recommended-environment)).
 
 **Can I use this fully inside Claude.ai / ChatGPT / Gemini / DeepSeek in the browser?**  
-Partially. You can upload docs in chat and get a strong JSON/Markdown draft if the skill (or `SKILL.md`) is in context. Browser chats usually **cannot** use `user_data/` on disk or reliably run `generate_resume_pdf.mjs`. See [Browser chat limitations](#browser-chat-limitations). Optimal setup: **Cursor** or **Claude Code** with this repo cloned.
+Partially. You can upload docs in chat and get a strong JSON/Markdown draft if the skill (or `SKILL.md`) is in context. Browser chats usually **cannot** use `tech-resume-generator_files/` on disk or reliably run `generate_resume_pdf.mjs`. See [Browser chat limitations](#browser-chat-limitations). Optimal setup: **Cursor** or **Claude Code** with this repo cloned.
 
 **Do I need to know how to code?**  
 You need a terminal for `git clone` / `npm install` / optional PDF render. The agent does the resume writing. Chat-only users can follow `SKILL.md` in-product and render PDF later on a machine with Node.
 
-**What files should I put in user_data/?**  
-Old resumes, LinkedIn exports/PDFs, certificates, portfolio dumps, notes — any mix. See [`user_data/README.md`](user_data/README.md). In a **browser** chat, upload those same files in the chat window instead (there is no `user_data/` folder on the web).
+**What files should I put in user_professional_data/?**  
+Old resumes, LinkedIn exports/PDFs, certificates, portfolio dumps, notes — any mix. See [`tech-resume-generator_files/user_professional_data/README.md`](tech-resume-generator_files/user_professional_data/README.md). In a **browser** chat, upload those same files in the chat window instead.
 
 **General vs JD-tailored — which should I pick?**  
 General for a website / default résumé. JD-tailored when applying to a specific posting so keywords and emphasis match (still only true facts).
 
 **How do I provide a job description?**  
-Paste it in chat, save `user_data/job_description.md` (or `.txt`/`.pdf`), or put multiple files under `user_data/jobs/`.
+Paste it in chat, or put files under `tech-resume-generator_files/job_description_data/`.
 
 **Will it invent metrics or employers?**  
 It must not. The skill instructs the agent to use only facts from your files. Always proofread before you submit.
@@ -757,10 +780,10 @@ The agent should write `scripts/extractors/<format>_extract.py`, run it, and con
 Ask for valid resume JSON anyway, save it locally, then `npm run generate-resume -- path/to/file.json`. This is the expected fallback for most browser chats.
 
 **Where do outputs go?**  
-Workspace `output/` (`general/` or `tailored/<slug>/`), plus `output/professional_data.md`. Not inside the skill package.
+`tech-resume-generator_files/output/` (`general/` or `tailored/<slug>/`), plus `professional_data.md` there. Not inside the skill package.
 
 **Is my data uploaded to you?**  
-No hosted service. Files stay on your machine / in the AI provider you chose. Do not commit `user_data/` to a public repo.
+No hosted service. Files stay on your machine / in the AI provider you chose. Do not commit personal files under `tech-resume-generator_files/` to a public repo.
 
 **Can I customize the PDF layout?**  
 Edit `scripts/generate_resume_pdf.mjs` or adjust JSON content/density. Layout is intentionally ATS-simple (single column, Helvetica).

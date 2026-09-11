@@ -3,7 +3,7 @@
   "description_eval": true,
   "queries": [
     {
-      "query": "Use tech-resume-generator to make my resume from the files in user_data/",
+      "query": "Use tech-resume-generator to make my resume from the files in tech-resume-generator_files/user_professional_data/",
       "should_trigger": true,
       "split": "train"
     },

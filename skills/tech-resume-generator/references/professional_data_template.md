@@ -1,6 +1,6 @@
 # Professional data template
 
-Write `output/professional_data.md` in this shape after extracting `user_data/`. Fill only with facts found in the user’s files. Use `Unknown` or omit a subsection when evidence is missing — never invent.
+Write `tech-resume-generator_files/output/professional_data.md` in this shape after extracting `user_professional_data/`. Fill only with facts found in the user’s files. Use `Unknown` or omit a subsection when evidence is missing — never invent.
 
 ```markdown
 # Professional data — <Full Name>
@@ -61,7 +61,7 @@ Group by category as found in sources. Note which are interview-defendable.
 
 ## 10. Licenses and certifications
 
-Only credentials with evidence in `user_data/`.
+Only credentials with evidence in `user_professional_data/`.
 
 ## 11. Volunteering / leadership
 
@@ -71,7 +71,7 @@ Only credentials with evidence in `user_data/`.
 
 ## 14. Source inventory
 
-List every file under `user_data/` and whether it was extracted.
+List every file under `user_professional_data/` and whether it was extracted.
 
 ## 15. Reconciliation notes
 

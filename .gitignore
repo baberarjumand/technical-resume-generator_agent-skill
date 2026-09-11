@@ -7,7 +7,18 @@ node_modules/
 __pycache__/
 *.pyc
 
-# User-provided career data and generated outputs (keep folder READMEs)
+# Skill workspace (keep READMEs + gitkeeps)
+tech-resume-generator_files/user_professional_data/**
+!tech-resume-generator_files/user_professional_data/README.md
+!tech-resume-generator_files/user_professional_data/.gitkeep
+tech-resume-generator_files/job_description_data/**
+!tech-resume-generator_files/job_description_data/README.md
+!tech-resume-generator_files/job_description_data/.gitkeep
+tech-resume-generator_files/output/**
+!tech-resume-generator_files/output/README.md
+!tech-resume-generator_files/output/.gitkeep
+
+# Legacy paths (older skill versions)
 user_data/**
 !user_data/README.md
 !user_data/.gitkeep
@@ -15,7 +26,6 @@ output/**
 !output/.gitkeep
 
 # Extraction intermediates
-user_data/_extracted/
 **/_extracted/
 
 # Agent-written one-off extractors may create temp files

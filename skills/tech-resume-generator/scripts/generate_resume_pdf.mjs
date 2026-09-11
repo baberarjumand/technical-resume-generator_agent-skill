@@ -278,8 +278,8 @@ Install deps from the skill directory (works after npx skills add):
   cd /path/to/tech-resume-generator && npm install
 
 Examples:
-  node scripts/generate_resume_pdf.mjs ../../output/general/jane_doe_resume.json
-  npm run generate-resume -- ../../output/general/jane_doe_resume.json
+  node scripts/generate_resume_pdf.mjs ../../tech-resume-generator_files/output/general/jane_doe_resume.json
+  npm run generate-resume -- ../../tech-resume-generator_files/output/general/jane_doe_resume.json
 
 Exit codes: 0 success, 1 missing/invalid args or validation failure.
 Writes overflow warnings if content exceeds the page.`)

@@ -1,6 +1,25 @@
 # Scripts
 
-Paths below are relative to the **skill directory** (`tech-resume-generator/`). Data folders `user_data/` and `output/` live on the **workspace root**.
+Paths below are relative to the **skill directory** (`tech-resume-generator/`). Data folders live under the workspace root in `tech-resume-generator_files/`.
+
+## `init_workspace.mjs`
+
+Creates `<workspace>/tech-resume-generator_files/` with:
+
+- `user_professional_data/` — career materials  
+- `job_description_data/` — job postings  
+- `output/` — generated résumés  
+
+Each folder gets a `README.md` (existing READMEs are left unchanged).
+
+```bash
+node scripts/init_workspace.mjs --help
+# from project root after npx skills add (no -g):
+node .agents/skills/tech-resume-generator/scripts/init_workspace.mjs
+node .cursor/skills/tech-resume-generator/scripts/init_workspace.mjs
+# or:
+node scripts/init_workspace.mjs --workspace /path/to/project
+```
 
 ## `extract_user_data.py`
 
@@ -9,8 +28,8 @@ Inventories a career-data folder and extracts what it can.
 ```bash
 python3 scripts/extract_user_data.py --help
 python3 scripts/extract_user_data.py \
-  --input /path/to/workspace/user_data \
-  --output /path/to/workspace/user_data/_extracted
+  --input /path/to/workspace/tech-resume-generator_files/user_professional_data \
+  --output /path/to/workspace/tech-resume-generator_files/user_professional_data/_extracted
 ```
 
 Outputs under `--output`:
@@ -34,7 +53,7 @@ Renders a one-page Letter résumé PDF from JSON (sibling `.pdf`).
 ```bash
 node scripts/generate_resume_pdf.mjs --help
 npm install   # once, in this skill directory (pdf-lib)
-node scripts/generate_resume_pdf.mjs /path/to/workspace/output/general/name_resume.json
+node scripts/generate_resume_pdf.mjs /path/to/workspace/tech-resume-generator_files/output/general/name_resume.json
 ```
 
 From the cloned repo root (postinstall installs skill deps):

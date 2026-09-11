@@ -1,11 +1,12 @@
 {
   "name": "skill-tech-resume-generator",
   "private": true,
-  "version": "1.2.0",
+  "version": "1.4.0",
   "type": "module",
   "description": "Agent skill that generates optimized one-page tech resumes from user-provided career data",
   "scripts": {
     "generate-resume": "node skills/tech-resume-generator/scripts/generate_resume_pdf.mjs",
+    "init-workspace": "node skills/tech-resume-generator/scripts/init_workspace.mjs",
     "extract-user-data": "python3 skills/tech-resume-generator/scripts/extract_user_data.py",
     "eval:grade": "python3 skills/tech-resume-generator/scripts/eval_grade.py --evals skills/tech-resume-generator/evals/evals.json",
     "eval:aggregate": "python3 skills/tech-resume-generator/scripts/eval_aggregate.py",
