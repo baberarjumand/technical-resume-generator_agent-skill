@@ -87,6 +87,8 @@ Preview without installing: `npx skills add baberarjumand/technical-resume-gener
 
 ## Quick start
 
+**Easiest way to use this skill:** ask your AI agent to analyze the **tech-resume-generator** agent skill and outline the steps in detail to use it, then ask the same agent to run the skill following those steps.
+
 ### Option A — Install via `npx skills` (recommended for local agents)
 
 Works with Cursor, Claude Code, Codex, Gemini CLI, Grok Build, and [many more](https://github.com/vercel-labs/skills#supported-agents). Discoverable on [skills.sh](https://skills.sh) after installs are reported (see [FAQ](#faq)).
@@ -158,6 +160,8 @@ pip install Pillow               # optional page renders
 ## Recommended environment
 
 **Best experience (full capabilities):** a **local AI coding agent** with filesystem + terminal access — especially **Cursor (Agent mode)** or **Claude Code**, with this repo cloned and `npm install` completed. **OpenAI Codex CLI** is a strong alternative when skills are enabled.
+
+**Easiest way to use this skill:** ask your AI agent to analyze the **tech-resume-generator** agent skill and outline the steps in detail to use it, then ask the same agent to run the skill following those steps.
 
 In that setup you get the complete loop:
 
