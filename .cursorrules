@@ -1,0 +1,10 @@
+# Agent Context Protocol
+
+Always follow this layered context protocol for work in this repository:
+
+1. **Scratchpad first.** Read `scratchpad.md` at session start for the current checklist. Use it only for ephemeral tasks.
+2. **Memory before architecture changes.** Read `memory.md` before modifying core architecture (skill layout, workspace I/O under `tech-resume-generator_files/`, PDF pipeline, `init_workspace` flow, or Agent Skills packaging).
+3. **Manage the scratchpad.** Mark checklist items done as you finish them. Clear completed ephemeral tasks when the task is done so the file stays current.
+4. **Append durable insights.** At the end of a session, append durable insights to `memory.md` (non-obvious constraints, architecture decisions, resolved complex bugs). Never append line-by-line logs or step-by-step transcripts.
+
+Domain-specific rules, when present, live under `.cursor/rules/*.mdc` and apply by their `globs` / `description` frontmatter.
